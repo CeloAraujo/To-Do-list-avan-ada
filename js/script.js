@@ -63,6 +63,8 @@ const updateTodo = (text) => {
 
     if (todoTitle.innerText === oldInputValue) {
       todoTitle.innerText = text;
+
+      updateTodoLocalStorage(oldInputValue, text)
     }
   });
 };
@@ -129,6 +131,8 @@ document.addEventListener("click", (e) => {
 
   if (targetEl.classList.contains("finish-todo")) {
     parentEl.classList.toggle("done");
+
+    updateTodoStatusLocalStorage(todoTitle);
   }
 
   if (targetEl.classList.contains("remove-todo")) {
@@ -142,6 +146,8 @@ document.addEventListener("click", (e) => {
 
     editInput.value = todoTitle;
     oldInputValue = todoTitle;
+
+
   }
 });
 
@@ -212,4 +218,25 @@ const removeTodoLocalStorage = (todoText) => {
 
   localStorage.setItem("todos", JSON.stringify(filteredTodos));
 };
+
+const updateTodoStatusLocalStorage = (todoText) => {
+  const todos = getTodosLocalStorage();
+
+  todos.map((todo) =>
+    todo.text === todoText ? (todo.done = !todo.done) : null
+  );
+
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
+
+const updateTodoLocalStorage = (todoOldText, todoNewText) => {
+  const todos = getTodosLocalStorage();
+
+  todos.map((todo) =>
+    todo.text === todoOldText ? (todo.text = todoNewText) : null
+  );
+
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
+
 loadTodos();
